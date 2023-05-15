@@ -166,7 +166,7 @@ function createRepository(filePath, res)
     end
     local _createRepositoryObject = createRepositoryObject
     if _createRepositoryObject == nil then
-        _createRepositoryObject = exports.maku_sqlentities.createRepositoryObject
+        _createRepositoryObject = exports.maku_sqlorm.createRepositoryObject
     end
     if #entities > 1 then
         local repositories = {}

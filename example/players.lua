@@ -3,7 +3,7 @@
 --- @column nick string NOT NULL
 --- @primaryKey id
 local function createPlayersRepository()
-    --return exports.maku_sqlentities:createRepository('example/players.lua')
+    --return exports.maku_sqlorm:createRepository('example/players.lua')
     return createRepository('example/players.lua', GetCurrentResourceName())
 end
 

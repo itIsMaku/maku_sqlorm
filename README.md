@@ -12,7 +12,11 @@ creating sql tables with annotations
 local function createUsersTable()
 end
 ```
-3. Call `make('<path>', GetCurrentResourceName())` function, where `path` is path to folder with files where are annotations in files (e.g. `example`) or specific lua file (e.g. `example/players.lua`)
+3. Call 
+```lua
+make('<path>', GetCurrentResourceName())
+```
+function, where `path` is path to folder with files where are annotations in files (e.g. `example`) or specific lua file (e.g. `example/players.lua`)
 4. MySQL table will be created if not exists :)
 
 ## Column data types

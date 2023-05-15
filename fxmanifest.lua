@@ -5,6 +5,5 @@ description 'Creating SQL entities from annotations.'
 
 server_scripts {
     '@mysql-async/lib/MySQL.lua',
-    'server/sv-*.lua',
-    'example/players.lua'
+    'server/sv-*.lua'
 }

@@ -1,5 +1,5 @@
-# SQL ORM
-simple lua sql ORM for fivem
+# FiveM SQL ORM
+Simple lua sql ORM for FiveM
 
 ## Usage
 First of all, you have to choose if you want to create a repository by export, or if you want to have the file added in the manifest of your script. 

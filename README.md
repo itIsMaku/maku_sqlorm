@@ -56,3 +56,6 @@ Repository:deleteAsync(id, callback)
 ```
 
 Great example can be found [there](https://github.com/itIsMaku/sql_orm/blob/main/example/players.lua).
+
+## Dependencies
+- [mysql-async](https://github.com/brouznouf/fivem-mysql-async) or [oxmysql](https://github.com/overextended/oxmysql)

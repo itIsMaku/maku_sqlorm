@@ -117,7 +117,7 @@ local function getEntities(content)
     return entities
 end
 
-function make(filePath, res)
+function createRepository(filePath, res)
     if res == nil then
         res = GetCurrentResourceName()
     end
@@ -164,4 +164,21 @@ function make(filePath, res)
             print('Created table:', entityName)
         end)
     end
+    local _createRepositoryObject = createRepositoryObject
+    if _createRepositoryObject == nil then
+        _createRepositoryObject = exports.maku_sqlentities.createRepositoryObject
+    end
+    if #entities > 1 then
+        local repositories = {}
+        for entityName, entity in pairs(entities) do
+            repositories[entityName] = _createRepositoryObject(entity)
+        end
+        return repositories
+    else
+        return _createRepositoryObject(entities[next(entities)])
+    end
 end
+
+exports('createRepository', function(filePath)
+    return createRepository(filePath, GetInvokingResource())
+end)

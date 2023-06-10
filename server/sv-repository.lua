@@ -26,6 +26,22 @@ local function formatUpdateQuery(tableName, tableColumns, primaryKey, data)
     return query
 end
 
+local function formatInsertOnDuplicateUpdateQuery(tableName, tableColumns, data)
+    local insertQuery = formatInsertQuery(tableName, tableColumns, data)
+
+    local columns = ""
+
+    for _, column in pairs(tableColumns) do
+        if data[column.name] ~= nil then
+            columns = columns .. column.name .. ' = @' .. column.name .. ','
+        end
+    end
+    columns = columns:sub(1, -2)
+
+    local query = insertQuery .. " ON DUPLICATE KEY UPDATE " .. columns
+    return query
+end
+
 function createRepositoryObject(entity)
     local repository = {
         entity = entity
@@ -35,40 +51,13 @@ function createRepositoryObject(entity)
         local object = result
 
         function object:saveAsync(callback)
-            if object[repository.entity.primaryKey] ~= nil then
-                repository:updateAsync(object, function(result)
-                    local status = nil
-                    if result > 0 then
-                        status = 'updated'
-                    end
-                    callback(status, result)
-                end)
-            else
-                repository:insertAsync(object, function(result)
-                    local status = nil
-                    if result > 0 then
-                        status = 'inserted'
-                    end
-                    callback(status, result)
-                end)
-            end
+            local query = formatInsertOnDuplicateUpdateQuery(repository.entity.name, repository.entity.columns, object)
+            MySQL.Async.execute(query, object, callback)
         end
 
-        function object.save()
-            local status = nil
-            local result = nil
-            if object[repository.entity.primaryKey] ~= nil then
-                result = repository:update(object)
-                if result > 0 then
-                    status = 'updated'
-                end
-            else
-                result = repository:insert(object)
-                if result > 0 then
-                    status = 'inserted'
-                end
-            end
-            return status, result
+        function object:save()
+            local query = formatInsertOnDuplicateUpdateQuery(repository.entity.name, repository.entity.columns, object)
+            return MySQL.Sync.execute(query, object)
         end
 
         return object
@@ -90,7 +79,7 @@ function createRepositoryObject(entity)
     end
 
     function repository:find(column, value)
-        local query = 'SELECT * FROM ' .. repository.entity.name .. ' WHERE ' .. column .. ' = @value'
+        local query = 'SELECT * FROM ' .. self.entity.name .. ' WHERE ' .. column .. ' = @value'
         local result = MySQL.Sync.fetchAll(query, {
             ['@value'] = value
         })

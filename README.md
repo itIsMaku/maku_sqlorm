@@ -31,7 +31,7 @@ Now we have created a repository object and can use its functions. A list of all
 local object = Repository:find(column, value)
 Repository:findAsync(column, value, callback)
 
-object.save()
+object:save()
 ```
 ```lua
 local objects = Repository:findAll()
@@ -39,7 +39,7 @@ Repository:findAllAsync(callback)
 ```
 ```lua
 local object = Repository:createEntity(data)
-object.save()
+object:save()
 ```
 When the `save` or `saveAsync` function is called on object, the object in the database is updated or, if it does not have a defined primary key, it is created.
 
